@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import { CountdownForm } from "@/components/CountdownForm";
 import { CountdownDisplay } from "@/components/CountdownDisplay";
+import { ThemeToggle } from "@/components/ThemeToggle";
 
 const STORAGE_KEY = "exitDate";
 
@@ -34,7 +35,10 @@ export default function Home() {
 	}
 
 	return (
-		<div className="min-h-screen flex flex-col items-center justify-center p-8">
+		<div className="min-h-screen flex flex-col items-center justify-center p-8 relative">
+			<div className="absolute top-4 right-4">
+				<ThemeToggle />
+			</div>
 			<main className="max-w-4xl w-full space-y-12">
 				<motion.div
 					className="text-center space-y-4"

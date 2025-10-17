@@ -59,3 +59,4 @@ Development server runs at http://localhost:3000
 - Auto-organize imports on save
 - 2-space indentation
 - Ignores: node_modules, .next, dist, build
+- use pnpm rather than npm for packages management
