@@ -4,9 +4,11 @@ import { motion, AnimatePresence, useAnimation } from "motion/react";
 import { format } from "date-fns";
 import { useEffect } from "react";
 import { useCountdown } from "@/hooks/useCountdown";
+import { ProgressBar } from "@/components/ProgressBar";
 
 interface CountdownDisplayProps {
 	targetDate: Date | null;
+	startDate: Date | null;
 }
 
 interface TimeUnitProps {
@@ -70,9 +72,12 @@ function TimeUnit({ value, label, isUrgent = false }: TimeUnitProps) {
 	);
 }
 
-export function CountdownDisplay({ targetDate }: CountdownDisplayProps) {
-	const { days, hours, minutes, seconds, isExpired } =
-		useCountdown(targetDate);
+export function CountdownDisplay({
+	targetDate,
+	startDate,
+}: CountdownDisplayProps) {
+	const { days, hours, minutes, seconds, isExpired, percentage } =
+		useCountdown(targetDate, startDate);
 
 	// Determine urgency (less than 7 days)
 	const isUrgent = days < 7;
@@ -167,6 +172,13 @@ export function CountdownDisplay({ targetDate }: CountdownDisplayProps) {
 				<TimeUnit value={minutes} label="Minutes" isUrgent={isUrgent} />
 				<TimeUnit value={seconds} label="Seconds" isUrgent={isUrgent} />
 			</div>
+			<motion.div
+				initial={{ opacity: 0, y: 10 }}
+				animate={{ opacity: 1, y: 0 }}
+				transition={{ delay: 0.6 }}
+			>
+				<ProgressBar percentage={percentage} isUrgent={isUrgent} />
+			</motion.div>
 		</motion.div>
 	);
 }
