@@ -9,15 +9,22 @@ interface CountdownTime {
 	minutes: number;
 	seconds: number;
 	isExpired: boolean;
+	percentage: number;
+	startDate: Date | null;
 }
 
-export function useCountdown(targetDate: Date | null): CountdownTime {
+export function useCountdown(
+	targetDate: Date | null,
+	startDate: Date | null = null,
+): CountdownTime {
 	const [timeRemaining, setTimeRemaining] = useState<CountdownTime>({
 		days: 0,
 		hours: 0,
 		minutes: 0,
 		seconds: 0,
 		isExpired: false,
+		percentage: 0,
+		startDate: null,
 	});
 
 	useEffect(() => {
@@ -28,13 +35,19 @@ export function useCountdown(targetDate: Date | null): CountdownTime {
 				minutes: 0,
 				seconds: 0,
 				isExpired: false,
+				percentage: 0,
+				startDate: null,
 			});
 			return;
 		}
 
+		// Use provided start date or current date
+		const effectiveStartDate = startDate || new Date();
+
 		const calculateTimeRemaining = () => {
 			const now = dayjs();
 			const target = dayjs(targetDate);
+			const start = dayjs(effectiveStartDate);
 			const diff = target.diff(now);
 
 			if (diff <= 0) {
@@ -44,6 +57,8 @@ export function useCountdown(targetDate: Date | null): CountdownTime {
 					minutes: 0,
 					seconds: 0,
 					isExpired: true,
+					percentage: 100,
+					startDate: effectiveStartDate,
 				});
 				return;
 			}
@@ -53,12 +68,22 @@ export function useCountdown(targetDate: Date | null): CountdownTime {
 			const minutes = Math.floor((diff / (1000 * 60)) % 60);
 			const seconds = Math.floor((diff / 1000) % 60);
 
+			// Calculate percentage: (elapsed / total) * 100
+			const totalTime = target.diff(start);
+			const elapsedTime = now.diff(start);
+			const percentage = Math.min(
+				100,
+				Math.max(0, (elapsedTime / totalTime) * 100),
+			);
+
 			setTimeRemaining({
 				days,
 				hours,
 				minutes,
 				seconds,
 				isExpired: false,
+				percentage,
+				startDate: effectiveStartDate,
 			});
 		};
 
@@ -66,7 +91,7 @@ export function useCountdown(targetDate: Date | null): CountdownTime {
 		const interval = setInterval(calculateTimeRemaining, 1000);
 
 		return () => clearInterval(interval);
-	}, [targetDate]);
+	}, [targetDate, startDate]);
 
 	return timeRemaining;
 }

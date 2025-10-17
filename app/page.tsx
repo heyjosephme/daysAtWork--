@@ -6,28 +6,39 @@ import { CountdownForm } from "@/components/CountdownForm";
 import { CountdownDisplay } from "@/components/CountdownDisplay";
 import { ThemeToggle } from "@/components/ThemeToggle";
 
-const STORAGE_KEY = "exitDate";
+const STORAGE_EXIT_KEY = "exitDate";
+const STORAGE_START_KEY = "startDate";
 
 export default function Home() {
 	const [targetDate, setTargetDate] = useState<Date | null>(null);
+	const [startDate, setStartDate] = useState<Date | null>(null);
 	const [isLoaded, setIsLoaded] = useState(false);
 
 	useEffect(() => {
-		const stored = localStorage.getItem(STORAGE_KEY);
-		if (stored) {
-			setTargetDate(new Date(stored));
+		const storedExit = localStorage.getItem(STORAGE_EXIT_KEY);
+		const storedStart = localStorage.getItem(STORAGE_START_KEY);
+
+		if (storedExit) {
+			setTargetDate(new Date(storedExit));
+		}
+		if (storedStart) {
+			setStartDate(new Date(storedStart));
 		}
 		setIsLoaded(true);
 	}, []);
 
-	const handleDateSubmit = (date: Date) => {
-		setTargetDate(date);
-		localStorage.setItem(STORAGE_KEY, date.toISOString());
+	const handleDateSubmit = (exitDate: Date, submittedStartDate: Date) => {
+		setTargetDate(exitDate);
+		setStartDate(submittedStartDate);
+		localStorage.setItem(STORAGE_EXIT_KEY, exitDate.toISOString());
+		localStorage.setItem(STORAGE_START_KEY, submittedStartDate.toISOString());
 	};
 
 	const handleReset = () => {
 		setTargetDate(null);
-		localStorage.removeItem(STORAGE_KEY);
+		setStartDate(null);
+		localStorage.removeItem(STORAGE_EXIT_KEY);
+		localStorage.removeItem(STORAGE_START_KEY);
 	};
 
 	if (!isLoaded) {
@@ -62,7 +73,7 @@ export default function Home() {
 							transition={{ duration: 0.4 }}
 							className="space-y-8"
 						>
-							<CountdownDisplay targetDate={targetDate} />
+							<CountdownDisplay targetDate={targetDate} startDate={startDate} />
 							<motion.div
 								className="flex justify-center"
 								initial={{ opacity: 0 }}
@@ -87,7 +98,11 @@ export default function Home() {
 							transition={{ duration: 0.4 }}
 							className="max-w-md mx-auto"
 						>
-							<CountdownForm onSubmit={handleDateSubmit} />
+							<CountdownForm
+								onSubmit={handleDateSubmit}
+								defaultExitDate={targetDate || undefined}
+								defaultStartDate={startDate || undefined}
+							/>
 						</motion.div>
 					)}
 				</AnimatePresence>
