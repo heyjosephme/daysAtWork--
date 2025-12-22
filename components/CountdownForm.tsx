@@ -29,10 +29,10 @@ export function CountdownForm({
   defaultStartDate,
 }: CountdownFormProps) {
   const [selectedExitDate, setSelectedExitDate] = useState<Date | undefined>(
-    defaultExitDate
+    defaultExitDate,
   );
   const [selectedStartDate, setSelectedStartDate] = useState<Date | undefined>(
-    defaultStartDate || new Date()
+    defaultStartDate || new Date(),
   );
   const [showStartDate, setShowStartDate] = useState(!!defaultStartDate);
 

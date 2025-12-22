@@ -2,13 +2,17 @@
 
 import { motion, AnimatePresence, useAnimation } from "motion/react";
 import { format } from "date-fns";
-import { useEffect } from "react";
+import { useEffect, useMemo } from "react";
 import { useCountdown } from "@/hooks/useCountdown";
 import { ProgressBar } from "@/components/ProgressBar";
+import { DualMetricsDisplay } from "@/components/DualMetricsDisplay";
+import type { CustomOffDay, UserPreferences } from "@/types";
 
 interface CountdownDisplayProps {
   targetDate: Date | null;
   startDate: Date | null;
+  customOffDays: CustomOffDay[];
+  preferences: UserPreferences;
 }
 
 interface TimeUnitProps {
@@ -75,14 +79,35 @@ function TimeUnit({ value, label, isUrgent = false }: TimeUnitProps) {
 export function CountdownDisplay({
   targetDate,
   startDate,
+  customOffDays,
+  preferences,
 }: CountdownDisplayProps) {
-  const { days, hours, minutes, seconds, isExpired, percentage } = useCountdown(
-    targetDate,
-    startDate
+  // Convert CustomOffDay[] to Date[] for useCountdown
+  // Use useMemo to prevent infinite re-renders
+  const offDayDates = useMemo(
+    () => customOffDays.map((day) => day.date),
+    [customOffDays],
   );
 
-  // Determine urgency (less than 7 days)
-  const isUrgent = days < 7;
+  const {
+    calendarDays,
+    businessDays,
+    hours,
+    minutes,
+    seconds,
+    isExpired,
+    percentage,
+    publicHolidays,
+    weekendDays,
+    customOffDays: customOffDaysCount,
+  } = useCountdown(targetDate, startDate, offDayDates);
+
+  // Use the appropriate days metric based on preferences
+  const displayDays =
+    preferences.calculationMode === "business" ? businessDays : calendarDays;
+
+  // Determine urgency (less than 7 days in the selected mode)
+  const isUrgent = displayDays < 7;
 
   if (!targetDate) {
     return (
@@ -168,8 +193,21 @@ export function CountdownDisplay({
         )}
         Counting down to {format(targetDate, "MMMM d, yyyy")}
       </motion.div>
+
+      {/* Dual Metrics Display */}
+      {preferences.showBothMetrics && (
+        <DualMetricsDisplay
+          calendarDays={calendarDays}
+          businessDays={businessDays}
+          weekendDays={weekendDays}
+          publicHolidays={publicHolidays}
+          customOffDays={customOffDaysCount}
+          primaryMode={preferences.calculationMode}
+        />
+      )}
+
       <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
-        <TimeUnit value={days} label="Days" isUrgent={isUrgent} />
+        <TimeUnit value={displayDays} label="Days" isUrgent={isUrgent} />
         <TimeUnit value={hours} label="Hours" isUrgent={isUrgent} />
         <TimeUnit value={minutes} label="Minutes" isUrgent={isUrgent} />
         <TimeUnit value={seconds} label="Seconds" isUrgent={isUrgent} />
