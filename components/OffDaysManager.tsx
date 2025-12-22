@@ -25,10 +25,20 @@ export function OffDaysManager({
   const [selectedDate, setSelectedDate] = useState<Date | undefined>();
   const [description, setDescription] = useState("");
 
+  // Helper to parse date string in local timezone (avoids UTC conversion)
+  const parseLocalDate = (dateString: string): Date => {
+    const [year, month, day] = dateString.split("-").map(Number);
+    return new Date(year, month - 1, day);
+  };
+
   const handleAddOffDay = () => {
     if (!selectedDate) return;
 
-    const dateString = selectedDate.toISOString().split("T")[0];
+    // Format date without timezone conversion (use local date)
+    const year = selectedDate.getFullYear();
+    const month = String(selectedDate.getMonth() + 1).padStart(2, "0");
+    const day = String(selectedDate.getDate()).padStart(2, "0");
+    const dateString = `${year}-${month}-${day}`;
 
     // Check if this date already exists
     const exists = customOffDays.some((day) => day.date === dateString);
@@ -48,7 +58,7 @@ export function OffDaysManager({
   };
 
   // Convert custom off days to Date objects for calendar highlighting
-  const offDayDates = customOffDays.map((day) => new Date(day.date));
+  const offDayDates = customOffDays.map((day) => parseLocalDate(day.date));
 
   return (
     <AnimatePresence>
@@ -179,7 +189,10 @@ export function OffDaysManager({
                         >
                           <div className="flex-1 min-w-0">
                             <div className="font-medium">
-                              {format(new Date(offDay.date), "MMMM d, yyyy")}
+                              {format(
+                                parseLocalDate(offDay.date),
+                                "MMMM d, yyyy",
+                              )}
                             </div>
                             {offDay.description && (
                               <div className="text-xs text-muted-foreground mt-0.5 truncate">
@@ -192,7 +205,7 @@ export function OffDaysManager({
                             onClick={() => onRemove(offDay.date)}
                             className="p-2 text-destructive opacity-0 group-hover:opacity-100 hover:bg-destructive/10 rounded transition-all"
                             aria-label={`Remove ${format(
-                              new Date(offDay.date),
+                              parseLocalDate(offDay.date),
                               "MMMM d, yyyy",
                             )}`}
                           >
