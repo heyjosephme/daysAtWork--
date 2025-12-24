@@ -1,13 +1,13 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { motion, AnimatePresence } from "motion/react";
 import { Settings as SettingsIcon } from "lucide-react";
-import { CountdownForm } from "@/components/CountdownForm";
+import { AnimatePresence, motion } from "motion/react";
+import { useEffect, useState } from "react";
 import { CountdownDisplay } from "@/components/CountdownDisplay";
-import { ThemeToggle } from "@/components/ThemeToggle";
-import { Settings } from "@/components/Settings";
+import { CountdownForm } from "@/components/CountdownForm";
 import { OffDaysManager } from "@/components/OffDaysManager";
+import { Settings } from "@/components/Settings";
+import { ThemeToggle } from "@/components/ThemeToggle";
 import type { CustomOffDay, UserPreferences } from "@/types";
 
 const STORAGE_EXIT_KEY = "exitDate";

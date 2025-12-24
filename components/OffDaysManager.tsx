@@ -1,11 +1,11 @@
 "use client";
 
-import { motion, AnimatePresence } from "motion/react";
-import { X, Calendar as CalendarIcon, Trash2, Plus } from "lucide-react";
+import { format } from "date-fns";
+import { Calendar as CalendarIcon, Plus, Trash2, X } from "lucide-react";
+import { AnimatePresence, motion } from "motion/react";
 import { useState } from "react";
 import { Calendar } from "@/components/ui/calendar";
 import type { CustomOffDay } from "@/types";
-import { format } from "date-fns";
 
 interface OffDaysManagerProps {
   isOpen: boolean;

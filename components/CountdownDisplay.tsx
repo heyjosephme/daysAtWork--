@@ -1,11 +1,11 @@
 "use client";
 
-import { motion, AnimatePresence, useAnimation } from "motion/react";
 import { format } from "date-fns";
+import { AnimatePresence, motion, useAnimation } from "motion/react";
 import { useEffect, useMemo } from "react";
-import { useCountdown } from "@/hooks/useCountdown";
-import { ProgressBar } from "@/components/ProgressBar";
 import { DualMetricsDisplay } from "@/components/DualMetricsDisplay";
+import { ProgressBar } from "@/components/ProgressBar";
+import { useCountdown } from "@/hooks/useCountdown";
 import type { CustomOffDay, UserPreferences } from "@/types";
 
 interface CountdownDisplayProps {

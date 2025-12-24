@@ -1,7 +1,7 @@
 "use client";
 
-import { motion, AnimatePresence } from "motion/react";
-import { X, Settings as SettingsIcon } from "lucide-react";
+import { Settings as SettingsIcon, X } from "lucide-react";
+import { AnimatePresence, motion } from "motion/react";
 import type { UserPreferences } from "@/types";
 
 interface SettingsProps {
