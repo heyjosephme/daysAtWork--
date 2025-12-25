@@ -11,6 +11,12 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Separator } from "@/components/ui/separator";
+import { Alert, AlertDescription } from "@/components/ui/alert";
 import type { CustomOffDay } from "@/types";
 
 interface OffDaysManagerProps {
@@ -80,9 +86,7 @@ export function OffDaysManager({
           {/* Left: Add new off-day */}
           <div className="space-y-4">
             <div>
-              <label className="text-sm font-medium mb-2 block">
-                Select Date
-              </label>
+              <Label className="mb-2 block">Select Date</Label>
               <Calendar
                 mode="single"
                 selected={selectedDate}
@@ -101,20 +105,14 @@ export function OffDaysManager({
               />
             </div>
 
-            <div>
-              <label
-                htmlFor="description"
-                className="text-sm font-medium mb-2 block"
-              >
-                Description (Optional)
-              </label>
-              <input
+            <div className="space-y-2">
+              <Label htmlFor="description">Description (Optional)</Label>
+              <Input
                 type="text"
                 id="description"
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
                 placeholder="e.g., Company event, Personal day"
-                className="w-full px-3 py-2 bg-background border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
                 onKeyDown={(e) => {
                   if (e.key === "Enter" && selectedDate) {
                     handleAddOffDay();
@@ -123,21 +121,22 @@ export function OffDaysManager({
               />
             </div>
 
-            <button
+            <Button
               type="button"
               onClick={handleAddOffDay}
               disabled={!selectedDate}
-              className="w-full px-4 py-2 bg-primary text-primary-foreground rounded-lg disabled:opacity-50 disabled:cursor-not-allowed hover:bg-primary/90 transition-colors flex items-center justify-center gap-2"
+              className="w-full"
             >
               <Plus className="w-4 h-4" />
               Add Off-Day
-            </button>
+            </Button>
           </div>
 
           {/* Right: List of custom off-days */}
           <div className="space-y-4">
-            <div className="text-sm font-medium">
-              Custom Off-Days ({customOffDays.length})
+            <div className="flex items-center gap-2">
+              <span className="text-sm font-medium">Custom Off-Days</span>
+              <Badge variant="secondary">{customOffDays.length}</Badge>
             </div>
 
             {customOffDays.length === 0 ? (
@@ -171,17 +170,18 @@ export function OffDaysManager({
                           </div>
                         )}
                       </div>
-                      <button
-                        type="button"
+                      <Button
+                        variant="ghost"
+                        size="icon"
                         onClick={() => onRemove(offDay.date)}
-                        className="p-2 text-destructive opacity-0 group-hover:opacity-100 hover:bg-destructive/10 rounded transition-all"
+                        className="text-destructive opacity-0 group-hover:opacity-100 hover:bg-destructive/10"
                         aria-label={`Remove ${format(
                           parseLocalDate(offDay.date),
                           "MMMM d, yyyy",
                         )}`}
                       >
                         <Trash2 className="w-4 h-4" />
-                      </button>
+                      </Button>
                     </motion.div>
                   ))}
               </div>
@@ -189,13 +189,14 @@ export function OffDaysManager({
           </div>
         </div>
 
-        {/* Info */}
-        <div className="mt-6 pt-6 border-t text-xs text-muted-foreground">
-          <p>
+        <Separator className="my-6" />
+
+        <Alert>
+          <AlertDescription>
             <strong>Note:</strong> Custom off-days are excluded from business
             days calculations along with weekends and Japanese public holidays.
-          </p>
-        </div>
+          </AlertDescription>
+        </Alert>
       </DialogContent>
     </Dialog>
   );

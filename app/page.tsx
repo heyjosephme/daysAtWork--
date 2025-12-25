@@ -8,6 +8,7 @@ import { CountdownForm } from "@/components/CountdownForm";
 import { OffDaysManager } from "@/components/OffDaysManager";
 import { Settings } from "@/components/Settings";
 import { ThemeToggle } from "@/components/ThemeToggle";
+import { Button } from "@/components/ui/button";
 import type { CustomOffDay, UserPreferences } from "@/types";
 
 const STORAGE_EXIT_KEY = "exitDate";
@@ -99,14 +100,14 @@ export default function Home() {
   return (
     <div className="min-h-screen flex flex-col items-center justify-center p-8 relative">
       <div className="absolute top-4 right-4 flex gap-2">
-        <button
-          type="button"
+        <Button
+          variant="ghost"
+          size="icon"
           onClick={() => setShowSettings(true)}
-          className="p-2 hover:bg-muted rounded-lg transition-colors"
           aria-label="Open settings"
         >
           <SettingsIcon className="w-5 h-5" />
-        </button>
+        </Button>
         <ThemeToggle />
       </div>
       <main className="max-w-4xl w-full space-y-12">
@@ -144,13 +145,14 @@ export default function Home() {
                 animate={{ opacity: 1 }}
                 transition={{ delay: 0.5 }}
               >
-                <button
-                  type="button"
+                <Button
+                  variant="link"
+                  size="sm"
                   onClick={handleReset}
-                  className="text-sm text-muted-foreground hover:text-foreground underline transition-colors"
+                  className="text-muted-foreground hover:text-foreground"
                 >
                   Change date
-                </button>
+                </Button>
               </motion.div>
             </motion.div>
           ) : (

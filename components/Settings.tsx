@@ -8,6 +8,9 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { Switch } from "@/components/ui/switch";
+import { Label } from "@/components/ui/label";
+import { Button } from "@/components/ui/button";
+import { Separator } from "@/components/ui/separator";
 import type { UserPreferences } from "@/types";
 
 interface SettingsProps {
@@ -52,30 +55,30 @@ export function Settings({
         <div className="space-y-6">
           {/* Calculation Mode */}
           <div className="space-y-3">
-            <label className="text-sm font-medium">Calculation Mode</label>
+            <Label>Calculation Mode</Label>
             <div className="grid grid-cols-2 gap-2">
-              <button
+              <Button
                 type="button"
-                onClick={() => handleModeChange("calendar")}
-                className={`px-4 py-2 rounded-lg border transition-all ${
+                variant={
                   preferences.calculationMode === "calendar"
-                    ? "bg-primary text-primary-foreground border-primary"
-                    : "bg-background hover:bg-muted border-border"
-                }`}
+                    ? "default"
+                    : "outline"
+                }
+                onClick={() => handleModeChange("calendar")}
               >
                 Calendar Days
-              </button>
-              <button
+              </Button>
+              <Button
                 type="button"
-                onClick={() => handleModeChange("business")}
-                className={`px-4 py-2 rounded-lg border transition-all ${
+                variant={
                   preferences.calculationMode === "business"
-                    ? "bg-primary text-primary-foreground border-primary"
-                    : "bg-background hover:bg-muted border-border"
-                }`}
+                    ? "default"
+                    : "outline"
+                }
+                onClick={() => handleModeChange("business")}
               >
                 Business Days
-              </button>
+              </Button>
             </div>
             <p className="text-xs text-muted-foreground">
               {preferences.calculationMode === "business"
@@ -87,12 +90,9 @@ export function Settings({
           {/* Show Both Metrics */}
           <div className="flex items-center justify-between">
             <div className="space-y-1">
-              <label
-                htmlFor="show-both"
-                className="text-sm font-medium cursor-pointer"
-              >
+              <Label htmlFor="show-both" className="cursor-pointer">
                 Show Both Metrics
-              </label>
+              </Label>
               <p className="text-xs text-muted-foreground">
                 Display calendar and business days simultaneously
               </p>
@@ -104,19 +104,22 @@ export function Settings({
             />
           </div>
 
+          <Separator />
+
           {/* Manage Off Days */}
-          <div className="pt-4 border-t">
-            <button
-              type="button"
-              onClick={onManageOffDays}
-              className="w-full px-4 py-3 bg-muted hover:bg-muted/80 rounded-lg transition-colors text-left"
-            >
+          <Button
+            type="button"
+            variant="secondary"
+            onClick={onManageOffDays}
+            className="w-full justify-start h-auto py-3"
+          >
+            <div className="text-left">
               <div className="font-medium">Manage Custom Off-Days</div>
-              <div className="text-xs text-muted-foreground mt-1">
+              <div className="text-xs text-muted-foreground mt-1 font-normal">
                 Add company holidays or personal off-days
               </div>
-            </button>
-          </div>
+            </div>
+          </Button>
         </div>
       </DialogContent>
     </Dialog>

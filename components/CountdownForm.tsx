@@ -7,6 +7,8 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
+import { Label } from "@/components/ui/label";
+import { Switch } from "@/components/ui/switch";
 
 const formSchema = z.object({
   exitDate: z.date({
@@ -74,32 +76,24 @@ export function CountdownForm({
       {/* Toggle for custom start date */}
       <div className="flex items-center justify-between p-4 bg-secondary/50 rounded-lg">
         <div className="space-y-0.5">
-          <label className="text-sm font-medium">Custom start date</label>
+          <Label htmlFor="custom-start" className="cursor-pointer">
+            Custom start date
+          </Label>
           <p className="text-xs text-muted-foreground">
             Set when you started planning to leave
           </p>
         </div>
-        <button
-          type="button"
-          onClick={() => setShowStartDate(!showStartDate)}
-          className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
-            showStartDate ? "bg-primary" : "bg-input"
-          }`}
-        >
-          <span
-            className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
-              showStartDate ? "translate-x-6" : "translate-x-1"
-            }`}
-          />
-        </button>
+        <Switch
+          id="custom-start"
+          checked={showStartDate}
+          onCheckedChange={setShowStartDate}
+        />
       </div>
 
       {/* Start date calendar (conditional) */}
       {showStartDate && (
         <div className="space-y-3">
-          <label className="text-sm font-medium">
-            When did you start planning to leave?
-          </label>
+          <Label>When did you start planning to leave?</Label>
           <div className="flex justify-center">
             <Calendar
               mode="single"
@@ -124,7 +118,7 @@ export function CountdownForm({
 
       {/* Exit date calendar (always shown) */}
       <div className="space-y-3">
-        <label className="text-sm font-medium">When are you leaving?</label>
+        <Label>When are you leaving?</Label>
         <div className="flex justify-center">
           <Calendar
             mode="single"
