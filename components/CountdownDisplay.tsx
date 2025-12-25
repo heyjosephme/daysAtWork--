@@ -4,8 +4,10 @@ import { format } from "date-fns";
 import { AnimatePresence, motion, useAnimation } from "motion/react";
 import { useEffect, useMemo } from "react";
 import { DualMetricsDisplay } from "@/components/DualMetricsDisplay";
+import { MilestoneCelebration } from "@/components/MilestoneCelebration";
 import { ProgressBar } from "@/components/ProgressBar";
 import { useCountdown } from "@/hooks/useCountdown";
+import { useMilestones } from "@/hooks/useMilestones";
 import type { CustomOffDay, UserPreferences } from "@/types";
 
 interface CountdownDisplayProps {
@@ -101,6 +103,13 @@ export function CountdownDisplay({
     weekendDays,
     customOffDays: customOffDaysCount,
   } = useCountdown(targetDate, startDate, offDayDates);
+
+  // Milestone tracking
+  const { currentMilestone, showCelebration, markCelebrated } = useMilestones(
+    percentage,
+    targetDate,
+    startDate,
+  );
 
   // Use the appropriate days metric based on preferences
   const displayDays =
@@ -219,6 +228,13 @@ export function CountdownDisplay({
       >
         <ProgressBar percentage={percentage} isUrgent={isUrgent} />
       </motion.div>
+
+      {/* Milestone Celebration */}
+      <MilestoneCelebration
+        milestone={currentMilestone}
+        isOpen={showCelebration}
+        onClose={markCelebrated}
+      />
     </motion.div>
   );
 }

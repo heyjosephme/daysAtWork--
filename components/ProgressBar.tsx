@@ -1,11 +1,19 @@
 "use client";
 
 import { motion } from "motion/react";
+import { ProgressMarker } from "@/components/ProgressMarker";
+import type { MilestonePosition } from "@/types";
 
 interface ProgressBarProps {
   percentage: number;
   isUrgent?: boolean;
 }
+
+const MILESTONES: { position: MilestonePosition; emoji: string }[] = [
+  { position: 25, emoji: "🎯" },
+  { position: 50, emoji: "🎉" },
+  { position: 75, emoji: "🚀" },
+];
 
 export function ProgressBar({
   percentage,
@@ -34,9 +42,9 @@ export function ProgressBar({
           {percentage.toFixed(1)}%
         </motion.span>
       </div>
-      <div className="relative h-3 bg-secondary rounded-full overflow-hidden">
+      <div className="relative h-3 bg-secondary rounded-full overflow-visible">
         <motion.div
-          className={`h-full ${getColor()} rounded-full relative`}
+          className={`h-full ${getColor()} rounded-full relative overflow-hidden`}
           initial={{ width: 0 }}
           animate={{ width: `${percentage}%` }}
           transition={{ duration: 1, ease: "easeOut" }}
@@ -54,6 +62,16 @@ export function ProgressBar({
             }}
           />
         </motion.div>
+
+        {/* Milestone markers */}
+        {MILESTONES.map(({ position, emoji }) => (
+          <ProgressMarker
+            key={position}
+            position={position}
+            isActive={percentage >= position}
+            emoji={emoji}
+          />
+        ))}
       </div>
     </div>
   );
