@@ -6,6 +6,7 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { CountdownDisplay } from "@/components/CountdownDisplay";
 import { CountdownForm } from "@/components/CountdownForm";
+import { Footer } from "@/components/Footer";
 import { OffDaysManager } from "@/components/OffDaysManager";
 import { Settings } from "@/components/Settings";
 import { ThemeToggle } from "@/components/ThemeToggle";
@@ -199,6 +200,8 @@ export default function Home() {
         onAdd={handleAddOffDay}
         onRemove={handleRemoveOffDay}
       />
+
+      <Footer />
     </div>
   );
 }
