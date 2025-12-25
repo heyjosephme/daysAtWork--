@@ -1,7 +1,8 @@
 "use client";
 
-import { Settings as SettingsIcon } from "lucide-react";
+import { Settings as SettingsIcon, Sparkles } from "lucide-react";
 import { AnimatePresence, motion } from "motion/react";
+import Link from "next/link";
 import { useEffect, useState } from "react";
 import { CountdownDisplay } from "@/components/CountdownDisplay";
 import { CountdownForm } from "@/components/CountdownForm";
@@ -118,8 +119,15 @@ export default function Home() {
           transition={{ duration: 0.6 }}
         >
           <h1 className="text-5xl font-bold tracking-tight">Days at Work--</h1>
-          <p className="text-muted-foreground text-lg">
+          <p className="text-muted-foreground text-lg flex items-center justify-center gap-2">
             Count down to your freedom
+            <Link
+              href="/freedom"
+              className="inline-flex items-center text-primary/60 hover:text-primary transition-colors"
+              aria-label="Learn about freedom"
+            >
+              <Sparkles className="w-4 h-4" />
+            </Link>
           </p>
         </motion.div>
 
