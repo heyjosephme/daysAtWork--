@@ -28,6 +28,7 @@ export default function Home() {
   });
   const [showSettings, setShowSettings] = useState(false);
   const [showOffDaysManager, setShowOffDaysManager] = useState(false);
+  const [showForm, setShowForm] = useState(false);
   const [isLoaded, setIsLoaded] = useState(false);
 
   useEffect(() => {
@@ -64,13 +65,15 @@ export default function Home() {
     setStartDate(submittedStartDate);
     localStorage.setItem(STORAGE_EXIT_KEY, exitDate.toISOString());
     localStorage.setItem(STORAGE_START_KEY, submittedStartDate.toISOString());
+    setShowForm(false);
   };
 
-  const handleReset = () => {
-    setTargetDate(null);
-    setStartDate(null);
-    localStorage.removeItem(STORAGE_EXIT_KEY);
-    localStorage.removeItem(STORAGE_START_KEY);
+  const handleChangeDate = () => {
+    setShowForm(true);
+  };
+
+  const handleCancelChange = () => {
+    setShowForm(false);
   };
 
   const handleAddOffDay = (offDay: CustomOffDay) => {
@@ -133,7 +136,7 @@ export default function Home() {
         </motion.div>
 
         <AnimatePresence mode="wait">
-          {targetDate ? (
+          {targetDate && !showForm ? (
             <motion.div
               key="countdown"
               initial={{ opacity: 0, x: 100 }}
@@ -157,7 +160,7 @@ export default function Home() {
                 <Button
                   variant="link"
                   size="sm"
-                  onClick={handleReset}
+                  onClick={handleChangeDate}
                   className="text-muted-foreground hover:text-foreground"
                 >
                   Change date
@@ -175,6 +178,7 @@ export default function Home() {
             >
               <CountdownForm
                 onSubmit={handleDateSubmit}
+                onCancel={targetDate ? handleCancelChange : undefined}
                 defaultExitDate={targetDate || undefined}
                 defaultStartDate={startDate || undefined}
               />

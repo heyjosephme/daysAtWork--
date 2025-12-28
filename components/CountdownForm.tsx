@@ -21,12 +21,14 @@ type FormValues = z.infer<typeof formSchema>;
 
 interface CountdownFormProps {
   onSubmit: (exitDate: Date, startDate: Date) => void;
+  onCancel?: () => void;
   defaultExitDate?: Date;
   defaultStartDate?: Date;
 }
 
 export function CountdownForm({
   onSubmit,
+  onCancel,
   defaultExitDate,
   defaultStartDate,
 }: CountdownFormProps) {
@@ -140,9 +142,25 @@ export function CountdownForm({
         )}
       </div>
 
-      <Button type="submit" className="w-full" disabled={!selectedExitDate}>
-        Start Countdown
-      </Button>
+      <div className="flex gap-2">
+        {onCancel && (
+          <Button
+            type="button"
+            variant="outline"
+            onClick={onCancel}
+            className="flex-1"
+          >
+            Cancel
+          </Button>
+        )}
+        <Button
+          type="submit"
+          className={onCancel ? "flex-1" : "w-full"}
+          disabled={!selectedExitDate}
+        >
+          Start Countdown
+        </Button>
+      </div>
     </form>
   );
 }
